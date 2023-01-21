@@ -1,5 +1,27 @@
-**/.DS_Store
-/node_modules
-**/public
+# primary
+node_modules
 config/paths.js
+process/experimentConfig.js
+**/public
+
+# local env files
+.env
+.env.local
+.env.*.local
+
+# Log files
 package-lock.json
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Editor directories and files
+**/.DS_Store
+.idea
+.vscode
+.history
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw*
