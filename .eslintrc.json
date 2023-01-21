@@ -1,0 +1,54 @@
+{
+  "rules": {
+    "no-func-assign": 2,
+    "prefer-template": 1,
+    "no-else-return": 1,
+    "no-var": 1,
+    "no-unused-vars": 1,
+    "camelcase": 0,
+    "no-nested-ternary": 0,
+    "no-console": 1,
+    "no-template-curly-in-string": 1,
+    "no-self-compare": 1,
+    "import/prefer-default-export": 0,
+    "arrow-body-style": 0,
+    "import/no-extraneous-dependencies": ["off", { "devDependencies": false }],
+    "linebreak-style": 0,
+    "operator-linebreak": ["error", "after", { "overrides": { "?": "before", ":": "before" } }],
+    "padded-blocks": ["error", "never"],
+    "indent": "off",
+    "comma-dangle": ["error", "never"],
+    "radix": ["error", "as-needed"],
+    "no-unused-expressions": ["error", { "allowShortCircuit": true, "allowTernary": true }],
+    "spaced-comment": ["error", "never"],
+    "implicit-arrow-linebreak": 0,
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+    "object-curly-newline": [
+      "error",
+      {
+        "ObjectExpression": "always",
+        "ObjectPattern": { "multiline": true },
+        "ImportDeclaration": "never",
+        "ExportDeclaration": { "multiline": true, "minProperties": 3 }
+      }
+    ]
+  },
+  "ignorePatterns": ["dist", "public", "node_modules", "webpack.*", "config/paths.js"],
+  "env": {
+    "browser": true,
+    "es6": true
+  },
+  "extends": ["eslint:recommended", "prettier", "airbnb"],
+  "parserOptions": {
+    "ecmaVersion": 2021,
+    "sourceType": "module"
+  },
+  "plugins": ["prettier"],
+  "settings": {
+    "import/resolver": {
+      "webpack": {
+        "config": "config/webpack.common.js"
+      }
+    }
+  }
+}
