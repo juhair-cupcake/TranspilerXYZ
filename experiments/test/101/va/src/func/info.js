@@ -1,5 +1,5 @@
 export const info = {
-  SITE: 'lol',
+  SITE: 'test',
   ID: '101',
-  VNAME: 'Va'
+  VNAME: 'va'
 };

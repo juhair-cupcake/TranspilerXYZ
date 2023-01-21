@@ -4,12 +4,12 @@ const fs = require('fs');
 const chalk = require('chalk');
 const defaults = require('./experimentConfig');
 
-const sharedJsContent = (siteName, experimentId, variationName) => `
-  export const info = {
-    SITE: '${siteName}',
-    ID: '${experimentId}',
-    VNAME: '${variationName}'
-  };`;
+const sharedJsContent = (siteName, experimentId, variationName) => `//export const info = {
+module.exports = {
+  SITE: '${siteName}',
+  ID: '${experimentId}',
+  VNAME: '${variationName}'
+};`;
 const createFile = (location, content) => {
   fs.writeFile(location, content, (err) => {
     if (err) {

@@ -49,8 +49,7 @@ fse.ensureFile(expConfigPathe).then(() => {
         createFile(
           `${dir}/src/scss/components/_info.scss`,
           `$id: '${siteName}-${experimentId}'; $variation-name: '${variationName}';`
-        )
-      )
+        ))
       .catch((err) => console.error(err));
   });
 });

@@ -24,14 +24,14 @@ fse.ensureFile(configPath).then(() => {
     }
     const { siteName, experimentId, variationName } = result;
 
-    const expPath = path.resolve(
-      __dirname,
-      `../experiments/${siteName}/${experimentId}/${variationName}/src/func/info.js`
-    );
+    //const expPath = path.resolve(
+    //__dirname,
+    //`../experiments/${siteName}/${experimentId}/${variationName}/src/func/info.js`
+    //);
 
     const content = sharedJsContent(siteName, experimentId, variationName);
 
-    createFile(expPath, content);
+    //createFile(expPath, content);
     createFile(configPath, content); //makes it easier to make code pack
 
     exec(`npm run configpath -- sn=${siteName} en=${experimentId} vn=${variationName}`);
