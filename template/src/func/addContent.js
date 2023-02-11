@@ -1,8 +1,8 @@
 import { log } from '../../../../../../utils/others';
 import { qa } from '../../../../../../utils/selectEle';
 
-export function otherF(pass) {
+export function addContent(base) {
   qa('a').forEach((element) => {
-    log(`${pass} => ${element}`);
+    log(`${base} => ${element}`);
   });
 }

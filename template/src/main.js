@@ -1,6 +1,6 @@
 import { waitForEle } from '../../../../../utils/poolFor';
 //import { info } from './func/info';
-import { otherF } from './func/otherF';
+import { addContent } from './func/addContent';
 
 //const ID = `${info.SITE}-${info.ID}`;
 const ID = 'TEST-101';
@@ -8,7 +8,7 @@ const ID = 'TEST-101';
 waitForEle('body', ([base]) => {
   document.body.classList.add(ID);
 
-  otherF(base);
+  addContent(base);
 });
 
 /*************************************************************

@@ -1,6 +1,11 @@
-export const q = (s, o) => {
+export function q(s, o) {
   return o ? s.querySelector(o) : document.querySelector(s);
-};
-export const qa = (s, o) => {
+}
+export function qa(s, o) {
   return o ? s.querySelectorAll(o) : document.querySelectorAll(s);
-};
+}
+export function insertEle(target, position, element) {
+  typeof element === 'string'
+    ? target.insertAdjacentHTML(position, element)
+    : target.insertAdjacentElement(position, element);
+}
