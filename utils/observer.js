@@ -1,3 +1,4 @@
+/*eslint-disable no-param-reassign*/
 export function mutationObs(
   target,
   callback,
@@ -7,8 +8,6 @@ export function mutationObs(
     subtree: true
   }
 ) {
-  const observer = new MutationObserver(callback);
-  typeof target === 'string'
-    ? observer.observe(document.querySelector(target), config)
-    : observer.observe(target, config);
+  if (typeof target === 'string') target = document.querySelector(target);
+  new MutationObserver(callback).observe(target, config);
 }

@@ -1,3 +1,14 @@
+export function waitFor(condition, callback, persistent = false, endTime = 10000, pollInterval = 25) {
+  const startTime = new Date();
+  (function poll() {
+    if (condition) {
+      callback();
+    } else {
+      persistent && setTimeout(poll, pollInterval);
+      !persistent && ((new Date() - startTime) < endTime) && setTimeout(poll, pollInterval);
+    }
+  }());
+}
 export function waitForEle(
   waitFor,
   callback,
