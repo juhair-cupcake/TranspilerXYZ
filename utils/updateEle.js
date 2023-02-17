@@ -11,3 +11,8 @@ export function insertEle(target, position, element, checkEle) {
       : target.insertAdjacentElement(position, element);
   }
 }
+export function removeAllAtr(element) {
+  while (element.attributes.length > 0) {
+    element.removeAttribute(element.attributes[0].name);
+  }
+}

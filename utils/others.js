@@ -1,3 +1,4 @@
+/*eslint-disable no-param-reassign */
 export function addCss(position, css) {
   const styles = document.createElement('style');
   styles.setAttribute('type', 'text/css');
