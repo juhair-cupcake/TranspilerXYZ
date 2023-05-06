@@ -1,5 +1,5 @@
 import { waitForEle } from '../../../../../utils/poolFor';
-//import { info } from './func/info';
+//import { info } from './func/data';
 import { addContent } from './func/addContent';
 
 //const ID = `${info.SITE}-${info.ID}`;

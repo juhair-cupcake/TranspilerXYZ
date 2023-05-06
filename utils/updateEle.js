@@ -1,3 +1,9 @@
+/*eslint-disable no-underscore-dangle*/
+
+export function _q(a, b) {
+  const x = b ? a.querySelectorAll(b) : document.querySelectorAll(a);
+  return x.length > 1 ? x : x[0];
+}
 export function q(s, o) {
   return o ? s.querySelector(o) : document.querySelector(s);
 }

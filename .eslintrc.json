@@ -23,6 +23,7 @@
     "spaced-comment": ["error", "never"],
     "implicit-arrow-linebreak": 0,
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+    "max-len": [1, { "code": 99999999 }],
     "object-curly-newline": [
       "error",
       {
@@ -40,7 +41,7 @@
   },
   "extends": ["eslint:recommended", "prettier", "airbnb"],
   "parserOptions": {
-    "ecmaVersion": 2021,
+    "ecmaVersion": 2020,
     "sourceType": "module"
   },
   "plugins": ["prettier"],

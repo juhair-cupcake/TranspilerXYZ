@@ -42,14 +42,15 @@ fse.ensureFile(expConfigPathe).then(() => {
         console.log("Build success! -- now 'npm start' to start development");
       })
       .then(() => {
-        createFile(`${dir}/src/func/info.js`, content);
+        createFile(`${dir}/src/func/data.js`, content);
         createFile(expConfigPathe, content);
       })
       .then(() =>
         createFile(
           `${dir}/src/scss/components/_info.scss`,
           `$id: '${siteName}-${experimentId}'; $variation-name: '${variationName}';`
-        ))
+        )
+      )
       .catch((err) => console.error(err));
   });
 });

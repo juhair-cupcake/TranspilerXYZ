@@ -1,14 +1,4 @@
-export function waitFor(condition, callback, persistent = false, endTime = 10000, pollInterval = 25) {
-  const startTime = new Date();
-  (function poll() {
-    if (condition) {
-      callback();
-    } else {
-      persistent && setTimeout(poll, pollInterval);
-      !persistent && ((new Date() - startTime) < endTime) && setTimeout(poll, pollInterval);
-    }
-  }());
-}
+/*eslint-disable no-undef*/
 export function waitForEle(
   waitFor,
   callback,
@@ -26,6 +16,26 @@ export function waitForEle(
         () => waitForEle(waitFor, callback, minElements, isVariable, timer - frequency),
         frequency
       );
+}
+
+export function pollForGA(ID, category, action, label) {
+  window.ga = window.ga || [];
+  ga('create', ID);
+  if (window.ga !== undefined) {
+    ga('send', 'event', {
+      eventCategory: category,
+      eventAction: action,
+      eventLabel: label
+    });
+  } else {
+    setTimeout(() => pollForGA(ID, category, action, label), 25);
+  }
+}
+
+export function pollForGAEvent(category, action, label) {
+  ga.getAll()[0]
+    ? ga.getAll()[0].send('event', category, action, label)
+    : setTimeout(() => pollForGAEvent(category, action, label), 25);
 }
 
 export function pollForText(waitFor, callback, elementNo = 0, timer = 10000, frequency = 25) {

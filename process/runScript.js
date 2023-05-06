@@ -26,7 +26,7 @@ fse.ensureFile(configPath).then(() => {
 
     //const expPath = path.resolve(
     //__dirname,
-    //`../experiments/${siteName}/${experimentId}/${variationName}/src/func/info.js`
+    //`../experiments/${siteName}/${experimentId}/${variationName}/src/func/data.js`
     //);
 
     const content = sharedJsContent(siteName, experimentId, variationName);
