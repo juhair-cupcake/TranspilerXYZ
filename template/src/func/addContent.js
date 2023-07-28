@@ -1,8 +1,12 @@
-import { log } from '../../../../../../utils/others';
-import { qa } from '../../../../../../utils/updateEle';
+import { q, insertEle } from '../../../../../../utils/updateEle';
 
-export function addContent(pass) {
-  qa('a').forEach((element) => {
-    log(`${pass} => ${element}`);
-  });
+export function addContent(ID, base) {
+  insertEle(
+    base,
+    'beforebegin',
+    `<div class="${ID}-content">
+      someThing will be here...
+    </div>`,
+    q(`.${ID}-content`)
+  );
 }
