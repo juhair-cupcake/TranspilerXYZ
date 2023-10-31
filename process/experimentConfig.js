@@ -1,6 +1,6 @@
 //export const info = {
 module.exports = {
-  SITE: 'kic',
-  ID: '89',
+  SITE: 'glo',
+  ID: '82',
   VNAME: 'v1'
 };

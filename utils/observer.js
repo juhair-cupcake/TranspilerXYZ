@@ -32,43 +32,24 @@ export function iframeClickObs(iFrameTitle, callback) {
   });
 }
 
-//under development
-//https://gomakethings.com/fixing-safaris-back-button-browser-cache-issue-with-vanilla-js/
 export function backCashObs(callback) {
+  window.addEventListener('pageshow', (e) => e.persisted && callback(e));
+  /*
+  https://gomakethings.com/fixing-safaris-back-button-browser-cache-issue-with-vanilla-js/
   window.onpageshow = (event) => {
     if (event.persisted) {
       callback(event);
     }
   };
+  */
 }
+//under development
 export function xmlObserver(callback) {
-  new PerformanceObserver((l) => {
-    l.getEntries().forEach((entry) => {
+  new PerformanceObserver((list) => {
+    list.getEntries().forEach((entry) => {
       entry.initiatorType === 'xmlhttprequest' && callback(entry);
     });
   }).observe({
     entryTypes: ['resource']
   });
-}
-//alpha
-export function updfetchEvent() {
-  (function (ns, fetch) {
-    if (typeof fetch !== 'function') return;
-    ns.fetch = function () {
-      const out = fetch.apply(this, arguments);
-
-      //side-effect
-      out.then(({ ok }) => {
-        if (window.fetchOutPut) {
-          window.fetchOutPut.push(arguments);
-        } else {
-          window.fetchOutPut = [];
-          window.fetchOutPut.push(arguments);
-        }
-      });
-
-      //return the old thing
-      return out;
-    };
-  })(window, window.fetch);
 }

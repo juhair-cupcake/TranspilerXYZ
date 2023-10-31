@@ -1,4 +1,14 @@
+/*eslint-disable wrap-iife */
 /*eslint-disable no-undef*/
+
+export function retryPool(callback, retryTime = 1000, retryFrequency = 25) {
+  if (retryTime <= 0) return;
+
+  setTimeout(() => {
+    retryPool(callback, retryTime - retryFrequency, retryFrequency);
+  }, retryFrequency);
+  callback();
+}
 export function waitFor(condition, callback, endTime = 10000, pollInterval = 25) {
   if (condition()) {
     callback(condition());
@@ -56,6 +66,17 @@ export function pollForGAEvent(category, action, label) {
     ? ga.getAll()[0].send('event', category, action, label)
     : setTimeout(() => pollForGAEvent(category, action, label), 25);
 }
+export function goalPush(action, label) {
+  if (window.dataLayer !== undefined) {
+    window.dataLayer.push({
+      event: 'ablyft_event',
+      ablyft_event_name: action,
+      target_element: label
+    });
+  } else {
+    setTimeout(goalPush(action, label), 25);
+  }
+}
 
 export function triggerEvents(
   element,
@@ -77,3 +98,11 @@ export function triggerEvents(
     });
   }, 1);
 }
+
+/*
+export function eleInView(el) {
+  const { top, bottom } = el.getBoundingClientRect();
+  const { innerHeight } = window;
+  return top <= innerHeight && bottom >= 0;
+}
+*/

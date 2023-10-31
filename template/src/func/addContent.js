@@ -1,4 +1,5 @@
 import { q, insertEle } from '../../../../../../utils/updateEle';
+import { expLog } from '../../../../../../utils/others';
 
 export function addContent(ID, base) {
   insertEle(
@@ -9,4 +10,6 @@ export function addContent(ID, base) {
     </div>`,
     q(`.${ID}-content`)
   );
+
+  expLog(ID, ['content-added']);
 }

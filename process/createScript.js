@@ -1,3 +1,4 @@
+/*eslint-disable function-paren-newline */
 /*eslint-disable global-require */
 /*eslint-disable no-console */
 /*eslint-disable object-curly-newline */
@@ -38,8 +39,8 @@ fse.ensureFile(expConfigPathe).then(() => {
       )
       .then((exists) => {
         if (exists) return;
-        return fse.copy('./template/', dir);
         console.log("Build success! -- now 'npm start' to start development");
+        return fse.copy('./template/', dir);
       })
       .then(() => {
         createFile(`${dir}/src/func/data.js`, content);

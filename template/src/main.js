@@ -1,21 +1,19 @@
+import { setExpInfo } from '../../../../../utils/others';
 import { waitFor } from '../../../../../utils/poolFor';
 import { q } from '../../../../../utils/updateEle';
-//import { info } from './func/data';
 import { addContent } from './func/addContent';
+//import { info } from './func/data';
 
 //const ID = `${info.SITE}-${info.ID}`;
 const ID = 'TEST-101';
 
-/*
-  Main 👑 JS code starts 👇
-  wait 😴 before ⌛ the site is ready👍!
-*/
 waitFor(
   () => q('body'),
   (base) => {
-    q('body').classList.add(ID);
-
     addContent(ID, base);
+
+    q('body').classList.add(ID);
+    setExpInfo(ID, 'Variation 1', 'Juhair Islam');
   }
 );
 
