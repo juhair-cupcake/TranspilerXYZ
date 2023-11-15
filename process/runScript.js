@@ -1,34 +1,56 @@
 /*eslint-disable consistent-return */
 const path = require('path');
+const fse = require('fs-extra');
 const { exec } = require('child_process');
 const inquirer = require('inquirer');
 
-const { sharedJsContent, createFile } = require('./cliUtils');
 const configPath = path.resolve(__dirname, '../process/experimentConfig.js');
+const { sharedJsContent, createFile } = require('./cliUtils');
 inquirer.registerPrompt('fuzzypath', require('inquirer-fuzzy-path'));
 
-inquirer
-  .prompt([
-    {
-      type: 'fuzzypath',
-      name: 'path',
-      itemType: 'file',
-      rootPath: './experiments',
-      excludePath: (nodePath) => {
-        return (
-          nodePath.includes('main.css') ||
-          nodePath.includes('main.bundle.js') ||
-          nodePath.includes('index.html')
-        );
-      },
-      message: 'Select experiment path:',
-      depthLimit: 4
-    }
-  ])
-  .then(function (answers) {
-    const data = JSON.stringify(answers.path).split('/');
+fse.ensureFile(configPath).then(() => {
+  inquirer
+    .prompt([
+      {
+        type: 'fuzzypath',
+        name: 'path',
+        itemType: 'file',
+        rootPath: './experiments',
+        excludePath: (nodePath) => {
+          return (
+            nodePath.includes('main.css') ||
+            nodePath.includes('main.bundle.js') ||
+            nodePath.includes('index.html')
+          );
+        },
+        message: 'Select experiment path:',
+        depthLimit: 4
+      }
+    ])
+    .then(function (answers) {
+      const result = JSON.stringify(answers.path);
+      const splitWith = result.includes('/') ? '/' : '\\';
+      const data = result.split(splitWith);
+      let number = 0,
+        name,
+        id,
+        variation;
 
-    const content = sharedJsContent(data[1], data[2], data[3]);
-    createFile(configPath, content); //makes it easier to make code pack
-    exec(`npm run configpath -- sn=${data[1]} en=${data[2]} vn=${data[3]}`);
-  });
+      data.forEach((e) => {
+        if (e && number <= 4) {
+          number++;
+          if (number === 2) {
+            name = e;
+          } else if (number === 3) {
+            id = e;
+          } else if (number === 4) {
+            variation = e;
+          }
+        }
+      });
+      //console.log(name, id, variation);
+
+      exec(`npm run configpath -- sn=${name} en=${id} vn=${variation}`);
+      createFile(configPath, sharedJsContent(name, id, variation));
+    });
+});

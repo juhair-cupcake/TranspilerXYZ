@@ -11,7 +11,6 @@ const sharedJsContent = (siteName, experimentId, variationName) => `module.expor
 };`;
 
 const { SITE, ID, VNAME } = defaults;
-
 const coolColor = chalk.bold.black.bgGreenBright;
 const createExpSchema = {
   properties: {
