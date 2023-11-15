@@ -32,6 +32,10 @@ npm run build
 npm run build-m
 ```
 
+## ESLint check
+
+By default it's turned off, to open the check go to `.eslintrc` and remove `"*"` from `"ignorePatterns"` on line no `37`
+
 ## Connect experiment with the site
 
 Copy below code in your UserJS/TemperMonkey

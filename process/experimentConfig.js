@@ -1,5 +1,5 @@
 module.exports = {
-  SITE: 'glr',
-  ID: '44',
+  SITE: 'tst',
+  ID: '101',
   VNAME: 'v1'
 };

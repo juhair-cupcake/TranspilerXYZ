@@ -16,9 +16,5 @@ waitFor(
 );
 
 /*************************************************************
-try {
-  console.log(window.ablyft);
-} catch (error) {
-  console.debug('ablyft not found\n' + error);
-}
+try to use ES module instead of commonJS module
 *************************************************************/

@@ -1,5 +1,6 @@
 /*eslint-disable consistent-return */
 const path = require('path');
+const fs = require('fs');
 const fse = require('fs-extra');
 const { exec } = require('child_process');
 const inquirer = require('inquirer');
@@ -8,49 +9,43 @@ const configPath = path.resolve(__dirname, '../process/experimentConfig.js');
 const { sharedJsContent, createFile } = require('./cliUtils');
 inquirer.registerPrompt('fuzzypath', require('inquirer-fuzzy-path'));
 
+function onErr(err) {
+  console.log(err);
+  return 1;
+}
+
 fse.ensureFile(configPath).then(() => {
-  inquirer
-    .prompt([
-      {
-        type: 'fuzzypath',
-        name: 'path',
-        itemType: 'file',
-        rootPath: './experiments',
-        excludePath: (nodePath) => {
-          return (
-            nodePath.includes('main.css') ||
-            nodePath.includes('main.bundle.js') ||
-            nodePath.includes('index.html')
-          );
-        },
-        message: 'Select experiment path:',
-        depthLimit: 4
-      }
-    ])
-    .then(function (answers) {
-      const result = JSON.stringify(answers.path);
-      const splitWith = result.includes('/') ? '/' : '\\';
-      const data = result.split(splitWith);
-      let number = 0,
-        name,
-        id,
-        variation;
+  let expClient, expId, expVar;
+  fs.readFile(configPath, 'utf8', function (err, data) {
+    if (err) onErr(err);
 
-      data.forEach((e) => {
-        if (e && number <= 4) {
-          number++;
-          if (number === 2) {
-            name = e;
-          } else if (number === 3) {
-            id = e;
-          } else if (number === 4) {
-            variation = e;
-          }
+    const i = data.split("'");
+    expClient = i[1];
+    expId = i[3];
+    expVar = i[5];
+    //console.log(expClient, expId, expVar);
+
+    inquirer
+      .prompt([
+        {
+          type: 'fuzzypath',
+          name: 'path',
+          itemType: 'file',
+          rootPath: './experiments',
+          default: `experiments/${expClient}/${expId}/${expVar}`,
+          excludePath: (nodePath) => {
+            return nodePath.includes('/public/');
+          },
+          message: 'Select experiment to run:',
+          depthLimit: 4
         }
-      });
-      //console.log(name, id, variation);
+      ])
+      .then(function (answers) {
+        [expClient, expId, expVar] = answers.path.replace(/\\/gi, '/').split('/').slice(1, 4);
+        //console.log(expClient, expId, expVar);
 
-      exec(`npm run configpath -- sn=${name} en=${id} vn=${variation}`);
-      createFile(configPath, sharedJsContent(name, id, variation));
-    });
+        exec(`npm run configpath -- sn=${expClient} en=${expId} vn=${expVar}`);
+        createFile(configPath, sharedJsContent(expClient, expId, expVar));
+      });
+  });
 });

@@ -22,7 +22,6 @@
     "no-unused-expressions": ["error", { "allowShortCircuit": true, "allowTernary": true }],
     "spaced-comment": ["error", "never"],
     "implicit-arrow-linebreak": 0,
-    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
     "max-len": [1, { "code": 99999999 }],
     "object-curly-newline": [
       "error",
@@ -34,7 +33,7 @@
       }
     ]
   },
-  "ignorePatterns": ["public", "node_modules", "process", "config"],
+  "ignorePatterns": ["public", "node_modules", "process", "config", "*"],
   "env": {
     "browser": true,
     "es6": true
