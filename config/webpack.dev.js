@@ -1,14 +1,12 @@
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-//const fs = require('fs')
 const { merge } = require('webpack-merge');
-//const paths = require('./paths');
 const common = require('./webpack.common');
 
 module.exports = merge(common, {
-  // Set the mode to development or production
+  //Set the mode to development or production
   mode: 'development',
 
-  // Control how source maps are generated
+  //Control how source maps are generated
   devtool: 'inline-source-map',
   optimization: {
     splitChunks: {
@@ -16,7 +14,7 @@ module.exports = merge(common, {
       name: 'shared'
     }
   },
-  // Spin up a server for quick development
+  //Spin up a server for quick development
   devServer: {
     historyApiFallback: true,
     allowedHosts: 'all',
@@ -35,7 +33,7 @@ module.exports = merge(common, {
 
   module: {
     rules: [
-      // Styles: Inject CSS into the head with source maps
+      //Styles: Inject CSS into the head with source maps
       {
         test: /\.(sass|scss|css)$/,
         use: [
@@ -55,7 +53,7 @@ module.exports = merge(common, {
     ]
   },
   plugins: [
-    // Extracts CSS into separate files
+    //Extracts CSS into separate files
     new MiniCssExtractPlugin({
       filename: 'styles/[name].css',
       chunkFilename: '[id].css'

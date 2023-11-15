@@ -35,7 +35,7 @@ module.exports = merge(common, {
     ]
   },
   plugins: [
-    // Extracts CSS into separate files
+    //Extracts CSS into separate files
     new MiniCssExtractPlugin({
       filename: '[name].css',
       chunkFilename: '[id].css'
@@ -49,9 +49,5 @@ module.exports = merge(common, {
   optimization: {
     minimize: true,
     minimizer: [new CssMinimizerPlugin(), '...']
-    // splitChunks: { chunks: 'all' },
-    // runtimeChunk: {
-    //   name: 'runtime'
-    // }
   }
 });

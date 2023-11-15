@@ -1,11 +1,11 @@
 {
-  "name": "AB-testing-transpilerXYZ",
-  "version": "3.0.1",
+  "name": "ab_testing_transpilerXYZ",
+  "version": "3.2.1",
   "main": "index.js",
-  "author": "",
+  "author": "juhair-cupcake",
   "scripts": {
-    "start": "node process/runScript.js && cross-env NODE_ENV=development webpack serve --config config/webpack.dev.js",
-    "new": "node process/createScript.js",
+    "start": "node --experimental-modules process/runScript.js && cross-env NODE_ENV=development webpack serve --config config/webpack.dev.js",
+    "new": "node --experimental-modules process/createScript.js",
     "build": "cross-env NODE_ENV=production webpack --config config/webpack.unminified.js",
     "build-m": "cross-env NODE_ENV=production webpack --config config/webpack.minified.js",
     "configpath": "node process/createPath.js"
@@ -66,7 +66,9 @@
     "command-line-usage": "^6.1.3",
     "fs-extra": "^10.1.0",
     "gradient-string": "^2.0.2",
-    "inquirer": "^8.2.5",
+    "inquirer": "^8.2.6",
+    "inquirer-autocomplete-standalone": "^0.8.1",
+    "inquirer-fuzzy-path": "^2.3.0",
     "postcss": "^8.4.14",
     "prompt": "^1.3.0",
     "react": "^18.2.0",

@@ -13,23 +13,20 @@ const currentPath = process.argv.reduce((prev, curr) => {
 
 const content = (currPath) => {
   const currentExperimentPath = `../experiments/${currPath}`;
-  const text = `
-    const path = require('path');
-    
-    module.exports = {
-      // Source files
-    
-      src: path.resolve(__dirname, \`${currentExperimentPath}src\`),
-    
-      // Production build files
-      build: path.resolve(__dirname, \`${currentExperimentPath}public\`),
-    
-      // Static files that get copied to build folder
-      public: path.resolve(__dirname, \`${currentExperimentPath}public\`),
-    
-      templateHTML: path.resolve(__dirname, '../template.html'),
-    };
-    `;
+  const text = `const path = require('path');
+
+module.exports = {
+  // Source files
+  src: path.resolve(__dirname, \`${currentExperimentPath}src\`),
+
+  // Production build files
+  build: path.resolve(__dirname, \`${currentExperimentPath}public\`),
+
+  // Static files that get copied to build folder
+  public: path.resolve(__dirname, \`${currentExperimentPath}public\`),
+
+  templateHTML: path.resolve(__dirname, '../index.html'),
+};`;
   return text;
 };
 
@@ -40,12 +37,8 @@ fse
   .then(() => {
     console.log('success!');
     fs.writeFile(pathFile, content(currentPath), (err) => {
-      if (err) {
-        console.error('ERROR', err);
-      }
+      if (err) console.error('ERROR', err);
       //file written successfully
     });
   })
-  .catch((err) => {
-    console.error(err);
-  });
+  .catch((err) => console.error(err));

@@ -6,11 +6,6 @@ const TerserPlugin = require('terser-webpack-plugin');
 const paths = require('./paths');
 const common = require('./webpack.common');
 
-// Used to regenerate `fullhash`/`chunkhash` between different implementation
-// Example: you fix a bug in custom minimizer/custom function, but unfortunately webpack doesn't know about it, so you will get the same fullhash/chunkhash
-// to avoid this you can provide version of your custom minimizer
-// You don't need if you use only `contenthash`
-
 module.exports = merge(common, {
   mode: 'production',
   devtool: false,
@@ -51,7 +46,7 @@ module.exports = merge(common, {
     ]
   },
   plugins: [
-    // Extracts CSS into separate files
+    //Extracts CSS into separate files
     new MiniCssExtractPlugin({
       filename: '[name].css',
       chunkFilename: '[id].css'
@@ -71,9 +66,7 @@ module.exports = merge(common, {
             dead_code: true,
             conditionals: true,
             evaluate: true,
-
-            // changed
-            ecma: 2022,
+            ecma: 2016,
             properties: false,
             drop_debugger: false,
             booleans: false,

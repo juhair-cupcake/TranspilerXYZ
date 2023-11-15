@@ -1,5 +1,4 @@
-//export const info = {
-module.exports = {
+export const info = {
   ID: '{{ID}}',
   VARIATION: '{{VARIATION}}',
   VNAME: '{{VARIATIONNAME}}'

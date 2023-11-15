@@ -34,7 +34,7 @@
       }
     ]
   },
-  "ignorePatterns": ["dist", "public", "node_modules", "webpack.*", "config/paths.js"],
+  "ignorePatterns": ["public", "node_modules", "process", "config"],
   "env": {
     "browser": true,
     "es6": true

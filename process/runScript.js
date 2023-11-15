@@ -1,44 +1,34 @@
-/*eslint-disable global-require */
-/*eslint-disable func-names */
 /*eslint-disable consistent-return */
-/*eslint-disable no-shadow */
-/*eslint-disable no-use-before-define */
-/*eslint-disable object-curly-newline */
-/*eslint-disable prefer-arrow-callback */
-/*eslint-disable no-undef */
-
 const path = require('path');
 const { exec } = require('child_process');
-const prompt = require('prompt');
-const fse = require('fs-extra');
+const inquirer = require('inquirer');
 
+const { sharedJsContent, createFile } = require('./cliUtils');
 const configPath = path.resolve(__dirname, '../process/experimentConfig.js');
-fse.ensureFile(configPath).then(() => {
-  const { sharedJsContent, createFile, runExpSchema } = require('./cliUtils');
+inquirer.registerPrompt('fuzzypath', require('inquirer-fuzzy-path'));
 
-  prompt.start();
-
-  prompt.get(runExpSchema, (err, result) => {
-    if (err) {
-      return onErr(err);
+inquirer
+  .prompt([
+    {
+      type: 'fuzzypath',
+      name: 'path',
+      itemType: 'file',
+      rootPath: './experiments',
+      excludePath: (nodePath) => {
+        return (
+          nodePath.includes('main.css') ||
+          nodePath.includes('main.bundle.js') ||
+          nodePath.includes('index.html')
+        );
+      },
+      message: 'Select experiment path:',
+      depthLimit: 4
     }
-    const { siteName, experimentId, variationName } = result;
+  ])
+  .then(function (answers) {
+    const data = JSON.stringify(answers.path).split('/');
 
-    //const expPath = path.resolve(
-    //__dirname,
-    //`../experiments/${siteName}/${experimentId}/${variationName}/src/func/data.js`
-    //);
-
-    const content = sharedJsContent(siteName, experimentId, variationName);
-
-    //createFile(expPath, content);
+    const content = sharedJsContent(data[1], data[2], data[3]);
     createFile(configPath, content); //makes it easier to make code pack
-
-    exec(`npm run configpath -- sn=${siteName} en=${experimentId} vn=${variationName}`);
+    exec(`npm run configpath -- sn=${data[1]} en=${data[2]} vn=${data[3]}`);
   });
-});
-
-function onErr(err) {
-  console.log(err);
-  return 1;
-}
