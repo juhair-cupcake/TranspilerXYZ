@@ -1,4 +1,5 @@
 {
+  "ignorePatterns": ["public", "node_modules", "process", "config", "*"],
   "rules": {
     "no-func-assign": 2,
     "prefer-template": 1,
@@ -33,7 +34,6 @@
       }
     ]
   },
-  "ignorePatterns": ["public", "node_modules", "process", "config", "*"],
   "env": {
     "browser": true,
     "es6": true
