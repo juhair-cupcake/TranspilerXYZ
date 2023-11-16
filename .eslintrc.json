@@ -21,7 +21,7 @@
     "comma-dangle": ["error", "never"],
     "radix": ["error", "as-needed"],
     "no-unused-expressions": ["error", { "allowShortCircuit": true, "allowTernary": true }],
-    "spaced-comment": ["error", "never"],
+    "spaced-comment": "off",
     "implicit-arrow-linebreak": 0,
     "max-len": [1, { "code": 99999999 }],
     "object-curly-newline": [
