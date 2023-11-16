@@ -23,6 +23,7 @@ fse.ensureFile(configPath).then(() => {
     expClient = i[1];
     expId = i[3];
     expVar = i[5];
+    const oldPath = `last-path->/${expClient}/${expId}/${expVar}`;
     //console.log(expClient, expId, expVar);
 
     inquirer
@@ -32,9 +33,13 @@ fse.ensureFile(configPath).then(() => {
           name: 'path',
           itemType: 'file',
           rootPath: './experiments',
-          default: `experiments/${expClient}/${expId}/${expVar}`,
+          default: oldPath,
           excludePath: (nodePath) => {
-            return nodePath.includes('/public/');
+            return (
+              nodePath.includes('index.html') ||
+              nodePath.includes('main.bundle.js') ||
+              nodePath.includes('main.css')
+            );
           },
           message: 'Select experiment to run:',
           depthLimit: 4
