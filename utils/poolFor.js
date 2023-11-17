@@ -98,3 +98,11 @@ export function triggerEvents(
     });
   }, 1);
 }
+
+/*
+export function eleInView(el) {
+  const { top, bottom } = el.getBoundingClientRect();
+  const { innerHeight } = window;
+  return top <= innerHeight && bottom >= 0;
+}
+*/

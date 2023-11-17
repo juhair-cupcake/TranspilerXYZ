@@ -1,56 +1,74 @@
+/* eslint-disable no-nested-ternary */
 /*eslint-disable consistent-return */
 const path = require('path');
-const fs = require('fs');
-const fse = require('fs-extra');
 const { exec } = require('child_process');
 const inquirer = require('inquirer');
+const inquirerFileTreeSelection = require('inquirer-file-tree-selection-prompt');
+const { SITE, ID, VNAME } = require('./experimentConfig.js');
+const { sharedJsContent, createFile } = require('./cliUtils');
 
 const configPath = path.resolve(__dirname, '../process/experimentConfig.js');
-const { sharedJsContent, createFile } = require('./cliUtils');
-inquirer.registerPrompt('fuzzypath', require('inquirer-fuzzy-path'));
 
-function onErr(err) {
-  console.log(err);
-  return 1;
-}
+inquirer.registerPrompt('file-tree-selection', inquirerFileTreeSelection);
 
-fse.ensureFile(configPath).then(() => {
-  let expClient, expId, expVar;
-  fs.readFile(configPath, 'utf8', function (err, data) {
-    if (err) onErr(err);
-
-    const i = data.split("'");
-    expClient = i[1];
-    expId = i[3];
-    expVar = i[5];
-    const oldPath = `last-path->/${expClient}/${expId}/${expVar}`;
-    //console.log(expClient, expId, expVar);
-
-    inquirer
-      .prompt([
-        {
-          type: 'fuzzypath',
-          name: 'path',
-          itemType: 'file',
-          rootPath: './experiments',
-          default: oldPath,
-          excludePath: (nodePath) => {
-            return (
-              nodePath.includes('index.html') ||
-              nodePath.includes('main.bundle.js') ||
-              nodePath.includes('main.css')
-            );
-          },
-          message: 'Select experiment to run:',
-          depthLimit: 4
+inquirer
+  .prompt([
+    {
+      type: 'file-tree-selection',
+      name: 'file',
+      root: './experiments',
+      validate: (input) => {
+        const pathname = `${input.replace(/\\/gi, '/').split('experiments/')[1]}`;
+        const level = pathname.split('/').length;
+        if (level > 2) {
+          return true;
         }
-      ])
-      .then(function (answers) {
-        [expClient, expId, expVar] = answers.path.replace(/\\/gi, '/').split('/').slice(1, 4);
-        //console.log(expClient, expId, expVar);
+        if (level === 1 && pathname === 'undefined') {
+          return true;
+        }
+        return 'PLEASE SELECT A VARIATION';
+      },
+      transformer: (input) => {
+        const pathname = `${input.replace(/\\/gi, '/').split('experiments/')[1]}`;
+        const name = pathname.split('/').length === 3 ? pathname.split('/')[2] : pathname.split('/').length === 2 ? pathname.split('/')[1] : pathname.split('/').length === 1 && pathname !== 'undefined' ? pathname.split('/')[0] : `CONTINUE PREVIOUS EXPERIMENT: ${SITE}-${ID} VARIATION: ${VNAME}`;
+        return `${name}/`;
+      }
+    }
+  ])
+  .then((answer) => {
+    const result = answer.file.replace(/\\/gi, '/');
+    const data = result.split('experiments/')[1];
+    const [client, id, variation] = data ? data.split('/').slice(0, 3) : [SITE, ID, VNAME];
 
-        exec(`npm run configpath -- sn=${expClient} en=${expId} vn=${expVar}`);
-        createFile(configPath, sharedJsContent(expClient, expId, expVar));
-      });
+    const content = sharedJsContent(client, id, variation);
+    createFile(configPath, content); //makes it easier to make code pack
+    exec(`npm run configpath -- sn=${client} en=${id} vn=${variation}`);
   });
-});
+
+// inquirer.registerPrompt('fuzzypath', require('inquirer-fuzzy-path'));
+
+// inquirer
+//   .prompt([
+//     {
+//       type: 'fuzzypath',
+//       name: 'path',
+//       itemType: 'file',
+//       rootPath: './experiments',
+//       excludePath: (nodePath) => (
+//         nodePath.includes('main.css')
+//           || nodePath.includes('main.bundle.js')
+//           || nodePath.includes('index.html')
+//       ),
+//       message: 'Select experiment path:',
+//       depthLimit: 4
+//     }
+//   ])
+//   .then((answers) => {
+//     const result = answers.path.replace(/\\/gi, '/');
+//     const data = result.split('/');
+//     const [client, id, variation] = data.slice(1, 4);
+
+//     const content = sharedJsContent(client, id, variation);
+//     createFile(configPath, content); //makes it easier to make code pack
+//     exec(`npm run configpath -- sn=${client} en=${id} vn=${variation}`);
+//   });
