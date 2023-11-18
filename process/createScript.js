@@ -45,11 +45,10 @@ fse.ensureFile(expConfigPathe).then(() => {
         );
         createFile(expConfigPathe, content);
       })
-      .then(() =>
-        createFile(
-          `${dir}/src/scss/components/_info.scss`,
-          `$id: '${siteName}-${experimentId}';\n $variation-name: '${variationName}';`
-        )
+      .then(() => createFile(
+        `${dir}/src/scss/components/_info.scss`,
+        `$id: '${siteName}-${experimentId}';\n $variation-name: '${variationName}';`
+      )
       )
       .catch((er) => console.error(er));
   });
