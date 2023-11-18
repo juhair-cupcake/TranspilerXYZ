@@ -19,20 +19,75 @@
     <code>
       // ==UserScript==
       <br />
-      // @name TranspilerXYZ
+      // @name         TranspilerXYZ
       <br />
-      // @description A/B testing transpiler with static script
+      // @description  A/B testing transpiler with HOT update script
       <br />
-      // @version 69
+      // @version      69
       <br />
-      // @author LEGEND
+      // @author       LEGEND
       <br />
-      // @match *://*/*
+      // @match        *://*/*
       <br />
       // ==/UserScript==
       <br />
       <br />
-      (function(){var ID="TRANSPILER-XYZ";console.debug("%c&lt;".concat(ID,">"),"font-weight: bold; font-size: 35px;color: red; text-shadow: 3px 3px 0 rgb(217,31,38) , 6px 6px 0 rgb(226,91,14) , 9px 9px 0 rgb(245,221,8) , 12px 12px 0 rgb(5,148,68) , 15px 15px 0 rgb(2,135,206) , 18px 18px 0 rgb(4,77,145) , 21px 21px 0 rgb(42,21,113)");var pushInDom=function(link,type){fetch(link).then(function(response){return response.text()}).then(function(fileData){var newFile=document.createElement(type);newFile.classList.add(ID);newFile.textContent=fileData;document.head.append(newFile)}).catch(function(err){console.debug(err)})};pushInDom("http://localhost:3000/styles/main.css","style");pushInDom("http://localhost:3000/shared.bundle.js","script");pushInDom("http://localhost:3000/main.bundle.js","script")})();
+      (()=>{const t="TRANSPILER-XYZ";const e=new WebSocket("ws://localhost:3000/ws");const o={js:"script",bJs:"script",css:"style"};const n=(e,n)=>{fetch(e).then(t=>{return t.text()}).then(e=>{const c=document.createElement(o[n]);const s=document.querySelector(`#${t}-${n}`);if(s)s.remove();c.id=`${t}-${n}`;c.textContent=e;document.head.append(c)}).catch(t=>{console.debug(t)})};const c=()=>{Object.keys(o).forEach(e=>{const o=document.querySelector(`#${t}-${e}`);o&&o.remove()})};e.onopen=function(){console.debug(`%c~${t}~`,"text-align: center; font-weight: bold; font-size: 50px;color: red; text-shadow: 3px 3px 0 rgb(217,31,38) , 6px 6px 0 rgb(226,91,14) , 9px 9px 0 rgb(245,221,8) , 12px 12px 0 rgb(5,148,68) , 15px 15px 0 rgb(2,135,206) , 18px 18px 0 rgb(4,77,145) , 21px 21px 0 rgb(42,21,113)");n("http://localhost:3000/shared.bundle.js","bJs")};e.onmessage=function(){n("http://localhost:3000/main.bundle.js","js");n("http://localhost:3000/styles/main.css","css")};e.onerror=function(){c()};e.onclose=function(){c()}})();
+
     </p>
+    <!--
+(() => {
+  const ID = 'TRANSPILER-XYZ';
+  const socket = new WebSocket('ws://localhost:3000/ws');
+  const fType = {
+    js: 'script',
+    bJs: 'script',
+    css: 'style'
+  };
+
+  const pushInDom = (link, type) => {
+    fetch(link)
+      .then((response) => {
+        return response.text();
+      })
+      .then((fileData) => {
+        const newF = document.createElement(fType[type]);
+        const oldF = document.querySelector(`#${ID}-${type}`);
+        if (oldF) oldF.remove();
+
+        newF.id = `${ID}-${type}`;
+        newF.textContent = fileData;
+        document.head.append(newF);
+      })
+      .catch((err) => {
+        console.debug(err);
+      });
+  };
+  const removeOld = () => {
+    Object.keys(fType).forEach(e=>{
+      const oldF = document.querySelector(`#${ID}-${e}`);
+      oldF && oldF.remove();
+    });
+  }
+
+  socket.onopen = function () {
+    console.debug(
+      `%c~${ID}~`,
+      'text-align: center; font-weight: bold; font-size: 50px;color: red; text-shadow: 3px 3px 0 rgb(217,31,38) , 6px 6px 0 rgb(226,91,14) , 9px 9px 0 rgb(245,221,8) , 12px 12px 0 rgb(5,148,68) , 15px 15px 0 rgb(2,135,206) , 18px 18px 0 rgb(4,77,145) , 21px 21px 0 rgb(42,21,113)'
+    );
+    pushInDom('http://localhost:3000/shared.bundle.js', 'bJs');
+  };
+  socket.onmessage = function () {
+    pushInDom('http://localhost:3000/main.bundle.js', 'js');
+    pushInDom('http://localhost:3000/styles/main.css', 'css');
+  };
+  socket.onerror = function () {
+    removeOld();
+  };
+  socket.onclose = function () {
+    removeOld();
+  };
+})();
+    -->
   </body>
 </html>
