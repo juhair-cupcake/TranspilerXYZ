@@ -4,71 +4,48 @@ const path = require('path');
 const { exec } = require('child_process');
 const inquirer = require('inquirer');
 const inquirerFileTreeSelection = require('inquirer-file-tree-selection-prompt');
+
 const { SITE, ID, VNAME } = require('./experimentConfig.js');
 const { sharedJsContent, createFile } = require('./cliUtils');
-
 const configPath = path.resolve(__dirname, '../process/experimentConfig.js');
 
-inquirer.registerPrompt('file-tree-selection', inquirerFileTreeSelection);
+const checkPathInExp = (route) => {
+  const routeName = route.replace(/\\/gi, '/');
 
+  if (routeName.includes('experiments/')) return routeName.split('experiments/').pop().split('/');
+  return false;
+};
+
+inquirer.registerPrompt('file-tree-selection', inquirerFileTreeSelection);
 inquirer
   .prompt([
     {
       type: 'file-tree-selection',
-      name: 'file',
+      name: 'selectDirectory',
       root: './experiments',
-      validate: (input) => {
-        const pathname = `${input.replace(/\\/gi, '/').split('experiments/')[1]}`;
-        const level = pathname.split('/').length;
-        if (level > 2) {
-          return true;
+      validate: (route) => {
+        const pathList = checkPathInExp(route);
+        if (pathList) {
+          if (pathList.length > 2) return true;
+          return false;
         }
-        if (level === 1 && pathname === 'undefined') {
-          return true;
-        }
-        return 'PLEASE SELECT A VARIATION';
+        return true;
       },
-      transformer: (input) => {
-        const pathname = `${input.replace(/\\/gi, '/').split('experiments/')[1]}`;
-        const name = pathname.split('/').length === 3 ? pathname.split('/')[2] : pathname.split('/').length === 2 ? pathname.split('/')[1] : pathname.split('/').length === 1 && pathname !== 'undefined' ? pathname.split('/')[0] : `CONTINUE PREVIOUS EXPERIMENT: ${SITE}-${ID} VARIATION: ${VNAME}`;
-        return `${name}/`;
-      }
+      transformer: (route) => {
+        const pathList = checkPathInExp(route);
+        if (pathList) return pathList.pop();
+        return `Continue where you left? ${SITE}-${ID}(${VNAME})`;
+      },
+      onlyShowDir: true
     }
   ])
-  .then((answer) => {
-    const result = answer.file.replace(/\\/gi, '/');
-    const data = result.split('experiments/')[1];
-    const [client, id, variation] = data ? data.split('/').slice(0, 3) : [SITE, ID, VNAME];
+  .then((result) => {
+    const data = checkPathInExp(result.selectDirectory);
+    let expClient = SITE,
+      expId = ID,
+      expVariation = VNAME;
 
-    const content = sharedJsContent(client, id, variation);
-    createFile(configPath, content); //makes it easier to make code pack
-    exec(`npm run configpath -- sn=${client} en=${id} vn=${variation}`);
+    if (data) [expClient, expId, expVariation] = data.slice(0, 3);
+    exec(`npm run configpath -- sn=${expClient} en=${expId} vn=${expVariation}`);
+    createFile(configPath, sharedJsContent(expClient, expId, expVariation));
   });
-
-// inquirer.registerPrompt('fuzzypath', require('inquirer-fuzzy-path'));
-
-// inquirer
-//   .prompt([
-//     {
-//       type: 'fuzzypath',
-//       name: 'path',
-//       itemType: 'file',
-//       rootPath: './experiments',
-//       excludePath: (nodePath) => (
-//         nodePath.includes('main.css')
-//           || nodePath.includes('main.bundle.js')
-//           || nodePath.includes('index.html')
-//       ),
-//       message: 'Select experiment path:',
-//       depthLimit: 4
-//     }
-//   ])
-//   .then((answers) => {
-//     const result = answers.path.replace(/\\/gi, '/');
-//     const data = result.split('/');
-//     const [client, id, variation] = data.slice(1, 4);
-
-//     const content = sharedJsContent(client, id, variation);
-//     createFile(configPath, content); //makes it easier to make code pack
-//     exec(`npm run configpath -- sn=${client} en=${id} vn=${variation}`);
-//   });

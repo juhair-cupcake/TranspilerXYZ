@@ -1,5 +1,5 @@
 module.exports = {
-  SITE: 'KIC',
-  ID: '65',
-  VNAME: '1'
+  SITE: 'test-2',
+  ID: '11',
+  VNAME: 'control'
 };

@@ -1,5 +1,5 @@
 {
-  "name": "ab_testing_transpilerXYZ",
+  "name": "ab-testing-transpilerxyz",
   "version": "3.2.1",
   "main": "index.js",
   "author": "juhair-cupcake",
@@ -69,7 +69,6 @@
     "inquirer": "^8.2.6",
     "inquirer-autocomplete-standalone": "^0.8.1",
     "inquirer-file-tree-selection-prompt": "^1.0.19",
-    "inquirer-fuzzy-path": "^2.3.0",
     "postcss": "^8.4.14",
     "prompt": "^1.3.0",
     "regenerator-runtime": "^0.13.9",

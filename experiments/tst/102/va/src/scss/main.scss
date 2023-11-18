@@ -1,8 +1,0 @@
-@import './components/info';
-@import './components/mixin';
-
-.#{$id} {
-  &-content {
-    background: red;
-  }
-}
